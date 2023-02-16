@@ -20,6 +20,14 @@ public class Node {
         this.isLeaf = v;
     }
 
+    public int getKeyByIndex(int index) {
+        if (index > m - 1 || index < 0) {
+            throw new IllegalArgumentException("index out of range !");
+        } else {
+            return this.keys[index];
+        }
+    }
+
     public int findKey(int key) {
         for (int i = 0; i < this.m - 1; i++) {
             if (this.keys[i] == key) {
