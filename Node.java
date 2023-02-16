@@ -1,5 +1,5 @@
 public class Node {
-
+    static final int NOT_FOUND = -1;
     private int m;
     private int keys[];
     private Node child[];
@@ -14,6 +14,10 @@ public class Node {
 
     public boolean isLeaf() {
         return this.isLeaf;
+    }
+
+    public void setKeys(int[] _keys) {
+        this.keys = _keys;
     }
 
     public void setLeaf(boolean v) {
@@ -34,6 +38,13 @@ public class Node {
                 return i;
             }
         }
-        return -1;
+        return NOT_FOUND;
+    }
+
+    public Node getChild(int index) {
+        if (index > -1 && index < this.m) {
+            return this.child[index];
+        }
+        throw new IllegalArgumentException("index out of bound");
     }
 }
