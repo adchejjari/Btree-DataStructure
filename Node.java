@@ -4,14 +4,18 @@ import java.util.Arrays;
 
 public class Node {
     static final int NOT_FOUND = -1;
+    static int empty = (int) Double.POSITIVE_INFINITY;
     private int m;
-    private int keys[];
-    private Node child[];
+    public int keys[];
+    public Node child[];
     private boolean isLeaf;
 
     public Node(int _m, boolean leaf) {
         this.m = _m;
         this.keys = new int[m - 1];
+        for (int i = 0; i < m - 1; i++) {
+            keys[i] = empty;
+        }
         this.child = new Node[m];
         this.isLeaf = leaf;
     }
@@ -70,7 +74,7 @@ public class Node {
 
     public boolean canInsert() {
         for (int i = 0; i < m - 1; i++) {
-            if (this.keys[i] == 0) {
+            if (this.keys[i] == empty) {
                 return true;
             }
         }
@@ -86,7 +90,7 @@ public class Node {
     public void insertNonFull(int key) {
 
         for (int i = 0; i < m - 1; i++) {
-            if (keys[i] == 0) {
+            if (keys[i] == empty) {
                 keys[i] = key;
                 break;
             }
@@ -97,7 +101,12 @@ public class Node {
 
     public void displayNode() {
         for (int i = 0; i < m - 1; i++) {
-            System.out.print(keys[i] + " - ");
+            if (keys[i] == empty) {
+                System.out.print("0 - ");
+            } else {
+                System.out.print(keys[i] + " - ");
+            }
+
         }
         System.out.println(" ");
     }

@@ -8,12 +8,17 @@ public class Main {
 
         btree.insert(30);
 
-        btree.insert(4);
-
-        btree.insert(10);
-
         btree.insert(20);
 
+        btree.insert(111);
+
+        btree.insert(25);
+
+        btree.insert(9000);
+
+        System.out.println("----------");
+
+        btree.root.displayNode();
     }
 
 }

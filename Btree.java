@@ -1,3 +1,4 @@
+import java.util.Arrays;
 
 public class Btree {
     Node root;
@@ -23,20 +24,16 @@ public class Btree {
     }
 
     private void insert(Node node, int key) {
-        System.out.println(node.isLeaf());
         if (node.isLeaf()) {
             if (node.canInsert()) {
                 node.insertNonFull(key);
             } else {
-                node.displayNode();
                 int i = 0;
                 Node currentRoot = node;
                 Node newRoot = new Node(m, false);
                 node = newRoot;
-
-                newRoot.setChildByIndex(i, currentRoot);
-
-                splitNode(newRoot, i, currentRoot);
+                node.setChildByIndex(i, currentRoot);
+                splitNode(node, i, currentRoot, key);
             }
 
         } else {
@@ -48,14 +45,23 @@ public class Btree {
         }
     }
 
-    private void splitNode(Node root, int index, Node nodeToSplit) {
+    private void splitNode(Node root, int index, Node nodeToSplit, int key) {
         Node newNode = new Node(m, nodeToSplit.isLeaf());
 
+        int[] tempkeys = new int[m];
+        for (int i = 0; i < m - 1; i++) {
+            tempkeys[i] = nodeToSplit.getKeyByIndex(i);
+        }
+        tempkeys[m - 1] = key;
+        Arrays.sort(tempkeys);
+
+        System.out.println("biggest value is : " + tempkeys[m - 1]);
+
         int mid = (int) Math.ceil((m - 1) / 2);
-        System.out.println("mid : " + nodeToSplit.getKeyByIndex(mid));
+        System.out.println("mid : " + tempkeys[mid]);
         for (int j = 0; j < mid; j++) {
-            int val = nodeToSplit.getKeyByIndex(j + mid);
-            nodeToSplit.setKeyByIndex(j + mid, 0);
+            int val = tempkeys[j + mid + 1];
+            nodeToSplit.setKeyByIndex(j + mid, Node.empty);
             newNode.setKeyByIndex(j, val);
         }
 
@@ -72,19 +78,19 @@ public class Btree {
             }
         }
 
-        for (int j = m - 1; j >= index + 1; j--) {
+        for (int j = m - 2; j >= index + 1; j--) {
             Node tempNode = root.getChildByIndex(j);
-            root.setChildByIndex(j, tempNode);
+            root.setChildByIndex(j + 1, tempNode);
         }
 
         root.setChildByIndex(index + 1, newNode);
 
-        for (int j = m - 1; j >= index; j--) {
+        for (int j = m - 3; j >= index; j--) {
             int tempKey = root.getKeyByIndex(j);
-            root.setKeyByIndex(j, tempKey);
+            root.setKeyByIndex(j + 1, tempKey);
         }
 
-        root.setKeyByIndex(index, mid);
+        root.setKeyByIndex(index, tempkeys[mid]);
     }
 
     public Node search(int key) {
@@ -92,6 +98,10 @@ public class Btree {
     }
 
     public void insert(int key) {
+        System.out.println("before " + key);
+        this.root.displayNode();
         this.insert(root, key);
+        System.out.println("after " + key);
+        this.root.displayNode();
     }
 }
