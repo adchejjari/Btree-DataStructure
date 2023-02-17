@@ -1,4 +1,6 @@
 import java.lang.Math;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 public class Node {
     static final int NOT_FOUND = -1;
@@ -35,14 +37,14 @@ public class Node {
     }
 
     public void setKeyByIndex(int index, int key) {
-        if (index > m - 1 || index < 0) {
+        if (index >= m - 1 || index < 0) {
             throw new IllegalArgumentException("index out of range !");
         }
         this.keys[index] = key;
     }
 
     public Node getChildByIndex(int index) {
-        if (index < 0 || index < this.m) {
+        if (index >= 0 && index < this.m) {
             return this.child[index];
         }
         throw new IllegalArgumentException("index out of bound");
@@ -50,8 +52,9 @@ public class Node {
     }
 
     public void setChildByIndex(int index, Node n) {
-        if (index < 0 || index < this.m) {
+        if (index >= 0 && index < this.m) {
             child[index] = n;
+            return;
         }
         throw new IllegalArgumentException("index out of bound");
     }
@@ -80,11 +83,23 @@ public class Node {
         }
     }
 
-    public void insertNonFull(Node node, int key) {
-        int i = 0;
-        while (i < m - 1 && key > node.getKeyByIndex(i))
-            i++;
-        moveKeys(i);
-        this.keys[i] = key;
+    public void insertNonFull(int key) {
+
+        for (int i = 0; i < m - 1; i++) {
+            if (keys[i] == 0) {
+                keys[i] = key;
+                break;
+            }
+        }
+
+        Arrays.sort(keys);
     }
+
+    public void displayNode() {
+        for (int i = 0; i < m - 1; i++) {
+            System.out.print(keys[i] + " - ");
+        }
+        System.out.println(" ");
+    }
+
 }

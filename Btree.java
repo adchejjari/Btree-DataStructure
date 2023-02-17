@@ -22,21 +22,21 @@ public class Btree {
         return this.find(node.getChildByIndex(i), key);
     }
 
-    public Node search(int key) {
-        return this.find(root, key);
-    }
-
-    public void insert(Node node, int key) {
+    private void insert(Node node, int key) {
+        System.out.println(node.isLeaf());
         if (node.isLeaf()) {
             if (node.canInsert()) {
-                node.insertNonFull(node, key);
+                node.insertNonFull(key);
             } else {
+                node.displayNode();
                 int i = 0;
-                while (i >= 0 && node.getKeyByIndex(i) > key) {
-                    i++;
-                }
-                Node tmp = node.getChildByIndex(i);
-                splitNode(node, i, tmp);
+                Node currentRoot = node;
+                Node newRoot = new Node(m, false);
+                node = newRoot;
+
+                newRoot.setChildByIndex(i, currentRoot);
+
+                splitNode(newRoot, i, currentRoot);
             }
 
         } else {
@@ -48,15 +48,19 @@ public class Btree {
         }
     }
 
-    public void splitNode(Node root, int index, Node nodeToSplit) {
+    private void splitNode(Node root, int index, Node nodeToSplit) {
         Node newNode = new Node(m, nodeToSplit.isLeaf());
 
         int mid = (int) Math.ceil((m - 1) / 2);
+        System.out.println("mid : " + nodeToSplit.getKeyByIndex(mid));
         for (int j = 0; j < mid; j++) {
             int val = nodeToSplit.getKeyByIndex(j + mid);
             nodeToSplit.setKeyByIndex(j + mid, 0);
             newNode.setKeyByIndex(j, val);
         }
+
+        nodeToSplit.displayNode();
+        newNode.displayNode();
 
         if (!nodeToSplit.isLeaf()) {
             for (int j = 0; j < mid; j++) {
@@ -70,16 +74,24 @@ public class Btree {
 
         for (int j = m - 1; j >= index + 1; j--) {
             Node tempNode = root.getChildByIndex(j);
-            root.setChildByIndex(j + 1, tempNode);
+            root.setChildByIndex(j, tempNode);
         }
 
         root.setChildByIndex(index + 1, newNode);
 
         for (int j = m - 1; j >= index; j--) {
             int tempKey = root.getKeyByIndex(j);
-            root.setKeyByIndex(j + 1, tempKey);
+            root.setKeyByIndex(j, tempKey);
         }
 
         root.setKeyByIndex(index, mid);
+    }
+
+    public Node search(int key) {
+        return this.find(root, key);
+    }
+
+    public void insert(int key) {
+        this.insert(root, key);
     }
 }
