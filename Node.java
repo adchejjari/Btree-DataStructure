@@ -27,6 +27,10 @@ public class Node {
     public void setKeys(int[] _keys) {
         this.keys = _keys;
     }
+    
+    public void setChildren(Node[] ch) {
+    	this.child = ch;
+    }
 
     public void setLeaf(boolean v) {
         this.isLeaf = v;
@@ -102,9 +106,9 @@ public class Node {
     public void displayNode() {
         for (int i = 0; i < m - 1; i++) {
             if (keys[i] == empty) {
-                System.out.print("0 - ");
+                System.out.print("0  ");
             } else {
-                System.out.print(keys[i] + " - ");
+                System.out.print(keys[i] + "  ");
             }
 
         }
